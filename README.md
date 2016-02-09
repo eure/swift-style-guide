@@ -19,7 +19,7 @@ That said, this is a live document. As our app grows, our team improves, and Swi
 - [Naming](#naming)
 - [Dependencies](#dependencies)
 - [Declaration Order](#declaration-order)
-- [Dynamic Protection](#dynamic-protection)
+- [Protection from Dynamism](#protection-from-dynamism)
 - [Type Inference](#type-inference)
 - [Collections / SequenceTypes](#collections--sequencetypes)
 
@@ -60,6 +60,7 @@ class Button {
 
 ### Use 4 spaces for tabs.
  Set XCode's **Text Editing** settings as shown:
+ 
 <img width="475" alt="screen shot 2016-02-09 at 14 52 28" src="https://cloud.githubusercontent.com/assets/3029684/12908678/f264612c-cf3c-11e5-8093-9ab04ac37dbc.png"/><br/>
 **Rationale:** Prevents whitespace-only code diffs, while maintaining visually similar indentation across different text editors.
 
@@ -80,15 +81,15 @@ let array = [1 , 2 , 3]
 <tr>
 <td><pre lang=swift>
 self.presentViewController(
-        controller,
-        animated: true,
-        completion: nil
+    controller,
+    animated: true,
+    completion: nil
 )
 </pre></td>
 <td><pre lang=swift>
 self.presentViewController(
-        controller ,
-        animated: true,completion: nil
+    controller ,
+    animated: true,completion: nil
 )
 </pre></td>
 </tr>
@@ -163,7 +164,7 @@ switch result {
 case .Success: self.doSomething()
     self.completion()
     
-case .Failure: self.failure()
+case .Failure:self.failure()
 }
 </pre></td>
 </tr>
@@ -283,6 +284,7 @@ override func drawRect(rect: CGRect) {
 
 **Rationale:** Makes it clear that the declaration was meant to be empty and not just a missing `TODO`. <br/>
 
+
 ### Closing curly braces (`}`) should not have empty lines before it. For single line closures, there should be one space between the last statement and the closing brace.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
@@ -317,6 +319,32 @@ class Button {
 **Rationale:** Prevents whitespace-only code diffs, while keeping code compact.
 
 
+### All functions should be at least one empty line apart each other
+<table>
+<tr><th>OK</th></tr>
+<tr>
+<td><pre lang=swift>
+class BaseViewController: UIViewController {
+
+    // ...
+    
+    override viewDidLoad() {
+    
+        // ...
+    }
+    
+    override viewWillAppear(animated: Bool) {
+    
+        // ...
+    }
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Gives breathing room between code blocks.
+
+
 
 ## Naming
 
@@ -348,11 +376,252 @@ import Cartography
 
 **Rationale:** Reduce merge conflicts when dependencies change between branches.
 
+
+
 ## Declaration Order
 
+### All type declarations such as `class`, `struct`, `enum`, `extension`, and `protocol`s, should be marked with `// MARK: - <name of declaration>` (with hyphen)
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+// MARK: - Icon
+
+class Icon {
+
+    // MARK: - CornerType
+
+    enum CornerType {
+    
+        case Square
+        case Rounded
+    }
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+// Icon
+
+class Icon {
+
+    // MARK: CornerType
+
+    enum CornerType {
+    
+        case Square
+        case Rounded
+    }
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Makes it easy to jump to specific types when using XCode's *Source Navigator*.
 
 
-## Dynamic Protection
+### All properties and methods should be grouped into the protocol/subclass they implement and should be tagged with `// MARK: <protocol/superclass name>`. The rest should be marked as either `// MARK: Public`, `// MARK: Internal`, or `// MARK: Private`.
+<table>
+<tr><th>OK</th></tr>
+<tr>
+<td><pre lang=swift>
+// MARK: - BaseViewController
+
+class BaseViewController: UIViewController, UIScrollViewDelegate {
+
+    // MARK: Internal
+    
+    weak var scrollView: UIScrollView?
+    
+    
+    // MARK: UIViewController
+    
+    override func viewDidLoad() {
+    
+        // ...
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+    
+        // ...
+    }
+    
+    
+    // MARK: UIScrollViewDelegate
+    
+    @objc dynamic func scrollViewDidScroll(scrollView: UIScrollView) {
+    
+        // ...
+    }
+    
+    
+    // MARK: Private
+    
+    private var lastOffset = CGPoint.zero
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Makes it easy to locate where in the source code certain properties and functions are declared.
+
+
+### The first `// MARK:` in a type declaration should have one empty line above, the rest should have two empty lines above. All `// MARK:` tags should have one empty line below.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+import UIKit
+
+
+// MARK: - BaseViewController
+
+class BaseViewController: UIViewController {
+
+    // MARK: Internal
+    
+    weak var scrollView: UIScrollView?
+    
+    
+    // MARK: UIViewController
+    
+    override func viewDidLoad() {
+    
+        // ...
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+    
+        // ...
+    }
+    
+    
+    // MARK: Private
+    
+    private var lastOffset = CGPoint.zero
+}
+</pre></td>
+<td><pre lang=swift>
+import UIKit
+// MARK: - BaseViewController
+class BaseViewController: UIViewController {
+
+    // MARK: Internal
+    weak var scrollView: UIScrollView?
+    
+    // MARK: UIViewController
+    override func viewDidLoad() {
+    
+        // ...
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+    
+        // ...
+    }
+    
+    // MARK: Private
+    private var lastOffset = CGPoint.zero
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Aesthetic. Gives breathing room between type declarations and function groups.
+
+
+### The groupings for `// MARK:` tags should be ordered as follows:
+- `// MARK: Public`
+- `// MARK: Internal`
+- Class Inheritance (parent-most to child-most)
+    - `// MARK: NSObject`
+    - `// MARK: UIResponder`
+    - `// MARK: UIViewController`
+- Protocol Inheritance (parent-most to child-most)
+    - `// MARK: UITableViewDataSource`
+    - `// MARK: UIScrollViewDelegate `
+    - `// MARK: UITableViewDelegate`
+- `// MARK: Private`
+
+**Rationale:** Makes it easy to locate where in the source code certain implementations are declared. `public` and `internal` declarations are more likely to be referred to by API consumers, so are declared at the top.
+
+
+### Under each grouping above, declarations should be ordered as follows:
+- `@` properties (`@NSManaged`, `@IBOutlet`, `@IBInspectable`, `@objc`, `@nonobjc`, etc.)
+- `var` properties
+- computed properties
+- `lazy` properties
+- `let` properties
+- `@` functions (`@NSManaged`, `@IBAction`, `@objc`, `@nonobjc`, etc.)
+- other functions
+
+**Rationale:** `@` properties and functions are more likely to be referred to (such as when checking KVC keys or `Selector` strings, or when cross-referencing with Interface Builder) so are declared higher.
+
+
+
+## Protection from Dynamism
+
+### All Objective-C `protocol` implementations, whether properties or methods, should be prefixed with `@objc dynamic`
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+@objc dynamic func scrollViewDidScroll(scrollView: UIScrollView) {
+    
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+func scrollViewDidScroll(scrollView: UIScrollView) {
+    
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Prevents horrible compiler optimization bugs. Trust us.
+
+
+### All `IBAction`s and `IBOutlet`s should be declared `dynamic`
+<table>
+<tr><th>OK</th></tr>
+<tr>
+<td><pre lang=swift>
+@IBOutlet private dynamic weak var closeButton: UIButton?
+
+@IBAction private dynamic func closeButtonTouchUpInside(sender: UIButton) {
+    
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** The Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
+
+
+### All properties used for KVC/KVO and all functions used as `Selector`s should be marked `dynamic`
+<table>
+<tr><th>OK</th></tr>
+<tr>
+<td><pre lang=swift>
+override func viewDidLoad() {
+
+    super.viewDidLoad()
+    let gesture = UITapGestureRecognizer(target: self, action: "tapGestureRecognized:")
+    self.view.addGestureRecognizer(gesture)
+}
+    
+private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
+    
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Same reason as the preceding rule, the Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
 
 
 
