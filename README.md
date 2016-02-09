@@ -21,12 +21,13 @@ That said, this is a live document. As our app grows, our team improves, and Swi
 - [Declaration Order](#declaration-order)
 - [Dynamic Protection](#dynamic-protection)
 - [Type Inference](#type-inference)
-- [Collections / SequenceTypes](#collections-sequencetypes)
+- [Collections / SequenceTypes](#collections--sequencetypes)
+
 
 
 ## Whitespaces
 
-- All source files should have a single trailing newline *at most*.
+### All source files should end with a single trailing newline (only).
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -53,14 +54,17 @@ class Button {
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents no-trailing-newline errors and reduces noise in commit diffs.
 
-- Use 4 spaces for tabs. Set XCode's **Text Editing** settings as shown:
+
+### Use 4 spaces for tabs.
+ Set XCode's **Text Editing** settings as shown:
 <img width="475" alt="screen shot 2016-02-09 at 14 52 28" src="https://cloud.githubusercontent.com/assets/3029684/12908678/f264612c-cf3c-11e5-8093-9ab04ac37dbc.png"/><br/>
 **Rationale:** Prevents whitespace-only code diffs, while maintaining visually similar indentation across different text editors.
 
 
-- Commas (`,`) should have no whitespace before it, and either one space or one newline after.
+### Commas (`,`) should have no whitespace before it, and either one space or one newline after.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -76,22 +80,24 @@ let array = [1 , 2 , 3]
 <tr>
 <td><pre lang=swift>
 self.presentViewController(
-    controller,
-    animated: true,
-    completion: nil
+        controller,
+        animated: true,
+        completion: nil
 )
 </pre></td>
 <td><pre lang=swift>
 self.presentViewController(
-    controller ,
-    animated: true,completion: nil
+        controller ,
+        animated: true,completion: nil
 )
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents whitespace-only code diffs.
 
-- Colons (`:`) used to indicate type should have once space after it and no whitespace before it.
+
+### Colons (`:`) used to indicate type should have once space after it and no whitespace before it.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -115,9 +121,11 @@ var item : Item? = nil
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents whitespace-only code diffs.
 
-- Colons (`:`) for `case` statements should have no whitespace before it, and either one space or one newline after it. A single-line statement after the `case` can be written inline.
+
+### Colons (`:`) for `case` statements should have no whitespace before it, and either one space or one newline after it. A single-line statement after the `case` can be written inline.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -160,9 +168,11 @@ case .Failure: self.failure()
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents whitespace-only code diffs, while keeping `case` statements visually aligned and uniform with each other.
 
-- Opening curly braces (`{`) should be one space following the previous non-whitespace character.
+
+### Opening curly braces (`{`) should be one space following the previous non-whitespace character.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -194,9 +204,11 @@ let block ={ () -> Void in
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents whitespace-only code diffs.
 
-- Opening curly braces (`{`) for type declarations, functions, and closures should be followed by one empty line.
+
+### Opening curly braces (`{`) for type declarations, functions, and closures should be followed by one empty line.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -229,9 +241,11 @@ class Icon {
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents whitespace-only code diffs.
 
-- Empty declarations should be written in empty curly braces (`{}`), otherwise a comment should indicate the reason for the empty implementation.
+
+### Empty declarations should be written in empty curly braces (`{}`), otherwise a comment should indicate the reason for the empty implementation.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -266,9 +280,10 @@ override func drawRect(rect: CGRect) {
 </pre></td>
 </tr>
 </table>
-**Rationale:** Makes it clear that the declaration was meant to be empty and not just a missing `TODO`.
 
-- Closing curly braces (`}`) should not have empty lines before it. For single line closures, there should be one space between the last statement and the closing brace.
+**Rationale:** Makes it clear that the declaration was meant to be empty and not just a missing `TODO`. <br/>
+
+### Closing curly braces (`}`) should not have empty lines before it. For single line closures, there should be one space between the last statement and the closing brace.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -298,17 +313,53 @@ class Button {
 </pre></td>
 </tr>
 </table>
+
 **Rationale:** Prevents whitespace-only code diffs, while keeping code compact.
+
 
 
 ## Naming
 
+
+
 ## Dependencies
+
+### `import` statements for OS frameworks and external frameworks should be separated and alphabetized.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+import Foundation
+import UIKit
+
+import Alamofire
+import Cartography
+import SwiftyJSON
+</pre></td>
+<td><pre lang=swift>
+import Foundation
+import Alamofire
+import SwiftyJSON
+import UIKit
+import Cartography
+</pre></td>
+</tr>
+</table>
+
+**Rationale:** Reduce merge conflicts when dependencies change between branches.
 
 ## Declaration Order
 
+
+
 ## Dynamic Protection
+
+
 
 ## Type Inference
 
+
+
 ## Collections / SequenceTypes
+
+
