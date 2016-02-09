@@ -55,17 +55,17 @@ class Button {
 </tr>
 </table>
 
-**Rationale:** Prevents no-trailing-newline errors and reduces noise in commit diffs.
+***Rationale:*** Prevents no-trailing-newline errors and reduces noise in commit diffs.
 
 
 ### Use 4 spaces for tabs.
  Set XCode's **Text Editing** settings as shown:
  
 <img width="475" alt="screen shot 2016-02-09 at 14 52 28" src="https://cloud.githubusercontent.com/assets/3029684/12908678/f264612c-cf3c-11e5-8093-9ab04ac37dbc.png"/><br/>
-**Rationale:** Prevents whitespace-only code diffs, while maintaining visually similar indentation across different text editors.
+***Rationale:*** Prevents whitespace-only code diffs, while maintaining visually similar indentation across different text editors.
 
 
-### Commas (`,`) should have no whitespace before it, and either one space or one newline after.
+### Commas (`,`) should have no whitespace before it, and should have either one space or one newline after.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -95,10 +95,10 @@ self.presentViewController(
 </tr>
 </table>
 
-**Rationale:** Prevents whitespace-only code diffs.
+***Rationale:*** Prevents whitespace-only code diffs.
 
 
-### Colons (`:`) used to indicate type should have once space after it and no whitespace before it.
+### Colons (`:`) used to indicate type should have once space after it and should have no whitespace before it.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -123,10 +123,10 @@ var item : Item? = nil
 </tr>
 </table>
 
-**Rationale:** Prevents whitespace-only code diffs.
+***Rationale:*** Prevents whitespace-only code diffs.
 
 
-### Colons (`:`) for `case` statements should have no whitespace before it, and either one space or one newline after it. A single-line statement after the `case` can be written inline.
+### Colons (`:`) for `case` statements should have no whitespace before it, and should have either one space or one newline after it. A single-line statement after the `case` can be written inline.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -170,7 +170,7 @@ case .Failure:self.failure()
 </tr>
 </table>
 
-**Rationale:** Prevents whitespace-only code diffs, while keeping `case` statements visually aligned and uniform with each other.
+***Rationale:*** Prevents whitespace-only code diffs, while keeping `case` statements visually aligned and uniform with each other.
 
 
 ### Opening curly braces (`{`) should be one space following the previous non-whitespace character.
@@ -206,7 +206,7 @@ let block ={ () -> Void in
 </tr>
 </table>
 
-**Rationale:** Prevents whitespace-only code diffs.
+***Rationale:*** Prevents whitespace-only code diffs.
 
 
 ### Opening curly braces (`{`) for type declarations, functions, and closures should be followed by one empty line.
@@ -243,7 +243,7 @@ class Icon {
 </tr>
 </table>
 
-**Rationale:** Prevents whitespace-only code diffs.
+***Rationale:*** Gives breathing room when scanning for code.
 
 
 ### Empty declarations should be written in empty curly braces (`{}`), otherwise a comment should indicate the reason for the empty implementation.
@@ -282,7 +282,7 @@ override func drawRect(rect: CGRect) {
 </tr>
 </table>
 
-**Rationale:** Makes it clear that the declaration was meant to be empty and not just a missing `TODO`. <br/>
+***Rationale:*** Makes it clear that the declaration was meant to be empty and not just a missing `TODO`. <br/>
 
 
 ### Closing curly braces (`}`) should not have empty lines before it. For single line closures, there should be one space between the last statement and the closing brace.
@@ -316,10 +316,10 @@ class Button {
 </tr>
 </table>
 
-**Rationale:** Prevents whitespace-only code diffs, while keeping code compact.
+***Rationale:*** Prevents whitespace-only code diffs, while keeping code compact.
 
 
-### All functions should be at least one empty line apart each other
+### All functions should be at least one empty line apart each other.
 <table>
 <tr><th>OK</th></tr>
 <tr>
@@ -342,8 +342,55 @@ class BaseViewController: UIViewController {
 </tr>
 </table>
 
-**Rationale:** Gives breathing room between code blocks.
+***Rationale:*** Gives breathing room between code blocks.
 
+
+### Use single spaces around operator definitions and operator calls.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+func <| (lhs: Int, rhs: Int) -> Int {
+
+    // ...
+}
+
+let value = 1 <| 2
+</pre></td>
+<td><pre lang=swift>
+func <|(lhs: Int, rhs: Int) -> Int {
+
+    // ...
+}
+
+let value = 1<|2
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Readability.
+
+
+### Use single spaces around return arrows (`->`) both in functions and in closures.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+func doSomething(value: Int) -> Int {
+
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+func doSomething(value: Int)->Int {
+
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Readability.
 
 
 ## Naming
@@ -374,7 +421,7 @@ import Cartography
 </tr>
 </table>
 
-**Rationale:** Reduce merge conflicts when dependencies change between branches.
+***Rationale:*** Reduce merge conflicts when dependencies change between branches.
 
 
 
@@ -417,10 +464,10 @@ class Icon {
 </tr>
 </table>
 
-**Rationale:** Makes it easy to jump to specific types when using XCode's *Source Navigator*.
+***Rationale:*** Makes it easy to jump to specific types when using XCode's *Source Navigator*.
 
 
-### All properties and methods should be grouped into the protocol/subclass they implement and should be tagged with `// MARK: <protocol/superclass name>`. The rest should be marked as either `// MARK: Public`, `// MARK: Internal`, or `// MARK: Private`.
+### All properties and methods should be grouped into the superclass/protocol they implement and should be tagged with `// MARK: <superclass/protocol name>`. The rest should be marked as either `// MARK: Public`, `// MARK: Internal`, or `// MARK: Private`.
 <table>
 <tr><th>OK</th></tr>
 <tr>
@@ -463,7 +510,7 @@ class BaseViewController: UIViewController, UIScrollViewDelegate {
 </tr>
 </table>
 
-**Rationale:** Makes it easy to locate where in the source code certain properties and functions are declared.
+***Rationale:*** Makes it easy to locate where in the source code certain properties and functions are declared.
 
 
 ### The first `// MARK:` in a type declaration should have one empty line above, the rest should have two empty lines above. All `// MARK:` tags should have one empty line below.
@@ -527,7 +574,7 @@ class BaseViewController: UIViewController {
 </tr>
 </table>
 
-**Rationale:** Aesthetic. Gives breathing room between type declarations and function groups.
+***Rationale:*** Aesthetic. Gives breathing room between type declarations and function groups.
 
 
 ### The groupings for `// MARK:` tags should be ordered as follows:
@@ -543,7 +590,7 @@ class BaseViewController: UIViewController {
     - `// MARK: UITableViewDelegate`
 - `// MARK: Private`
 
-**Rationale:** Makes it easy to locate where in the source code certain implementations are declared. `public` and `internal` declarations are more likely to be referred to by API consumers, so are declared at the top.
+***Rationale:*** Makes it easy to locate where in the source code certain implementations are declared. `public` and `internal` declarations are more likely to be referred to by API consumers, so are declared at the top.
 
 
 ### Under each grouping above, declarations should be ordered as follows:
@@ -555,7 +602,7 @@ class BaseViewController: UIViewController {
 - `@` functions (`@NSManaged`, `@IBAction`, `@objc`, `@nonobjc`, etc.)
 - other functions
 
-**Rationale:** `@` properties and functions are more likely to be referred to (such as when checking KVC keys or `Selector` strings, or when cross-referencing with Interface Builder) so are declared higher.
+***Rationale:*** `@` properties and functions are more likely to be referred to (such as when checking KVC keys or `Selector` strings, or when cross-referencing with Interface Builder) so are declared higher.
 
 
 
@@ -580,7 +627,7 @@ func scrollViewDidScroll(scrollView: UIScrollView) {
 </tr>
 </table>
 
-**Rationale:** Prevents horrible compiler optimization bugs. Trust us.
+***Rationale:*** Prevents horrible compiler optimization bugs. Trust us.
 
 
 ### All `IBAction`s and `IBOutlet`s should be declared `dynamic`
@@ -598,7 +645,7 @@ func scrollViewDidScroll(scrollView: UIScrollView) {
 </tr>
 </table>
 
-**Rationale:** The Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
+***Rationale:*** The Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
 
 
 ### All properties used for KVC/KVO and all functions used as `Selector`s should be marked `dynamic`
@@ -621,7 +668,7 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 </tr>
 </table>
 
-**Rationale:** Same reason as the preceding rule, the Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
+***Rationale:*** Same reason as the preceding rule, the Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
 
 
 
@@ -631,4 +678,123 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 
 ## Collections / SequenceTypes
 
+### `.count` should only be used when the count value itself is needed
+Checking if empty or not:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+if sequence.isEmpty {
+// ...
+</pre></td>
+<td><pre lang=swift>
+if sequence.count <= 0 {
+// ...
+</pre></td>
+</tr>
+</table>
+
+Getting the first or last item:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+let first = sequence.first
+let last = sequence.last
+</pre></td>
+<td><pre lang=swift>
+let first = sequence[0]
+let last = sequence[sequence.count - 1]
+</pre></td>
+</tr>
+</table>
+
+Removing the first or last item:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+sequence.removeFirst()
+sequence.removeLast()
+</pre></td>
+<td><pre lang=swift>
+sequence.removeAtIndex(0)
+sequence.removeAtIndex(sequence.count - 1)
+</pre></td>
+</tr>
+</table>
+
+Iterating all indexes:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+for i in sequence.indices {
+
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+for i in 0 ..< sequence.count {
+
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+Getting the first or last index:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+let first = sequence.indices.first
+let last = sequence.indices.last
+</pre></td>
+<td><pre lang=swift>
+let first = 0
+let last = sequence.count - 1
+</pre></td>
+</tr>
+</table>
+
+Iterating all indexes except the last `n` indexes:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+for i in sequence.indices.dropLast(n) {
+
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+for i in 0 ..< (sequence.count - n) {
+
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+Iterating all indexes except the first `n` indexes:
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+for i in sequence.indices.dropFirst(n) {
+
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+for i in n ..< sequence.count {
+
+    // ...
+}
+</pre></td>
+</tr>
+</table>
+
+***In general, if you have to add or subtract to count, there is probably a better, swifty way to do it***
 
