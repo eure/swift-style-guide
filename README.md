@@ -15,29 +15,34 @@ We understand that a quite a few of the guidelines below are controversial and m
 That said, this is a live document. As our app grows, our team improves, and Swift evolves, our practices will adapt as well and this list will be updated if needed.
 
 
-## Table of Contents
-- [Formatting](#formatting)
-    - [Semicolons (`;`)](#semicolons)
-    - [Whitespaces](#whitespaces)
-    - [Commas (`,`)](#commas)
-    - [Colons (`:`)](#colons)
-    - [Braces (`{}`)](#braces)
-    - [Properties](#properties)
-    - [Control Flow Statements](#control-flow-statements)
-- [Naming](#naming)
-    - [Capitalization](#capitalization)
-    - [Semantics](#semantics)
-- [Dependencies](#dependencies)
-    - [Import Statements](#import-statements)
-- [Declaration Order](#declaration-order)
-- [Protection from Dynamism](#protection-from-dynamism)
-- [Access Modifiers](#access-modifiers)
-- [Type Inference](#type-inference)
-- [Collections / SequenceTypes](#collections--sequencetypes)
-- [Rules on `self`](#rules-on-self)
+# Table of Contents
+- [Styles and Conventions](#styles-and-conventions)
+	- [Formatting](#formatting)
+	    - [Semicolons (`;`)](#semicolons)
+	    - [Whitespaces](#whitespaces)
+	    - [Commas (`,`)](#commas)
+	    - [Colons (`:`)](#colons)
+	    - [Braces (`{}`)](#braces)
+	    - [Properties](#properties)
+	    - [Control Flow Statements](#control-flow-statements)
+	- [Naming](#naming)
+	    - [Capitalization](#capitalization)
+	    - [Semantics](#semantics)
+	- [Dependencies](#dependencies)
+	    - [Import Statements](#import-statements)
+	- [Declaration Order](#declaration-order)
+- [Best Practices](#best-practices)
+	- [Comments](#comments)
+	- [Protection from Dynamism](#protection-from-dynamism)
+	- [Access Modifiers](#access-modifiers)
+	- [Type Inference](#type-inference)
+	- [Collections / SequenceTypes](#collections--sequencetypes)
+	- [Rules on `self`](#rules-on-self)
 
 
 
+
+# Styles and Conventions
 
 ## Formatting
 
@@ -562,6 +567,7 @@ if array.isEmpty {
 }
 </pre></td>
 </tr>
+<tr>
 <td></td>
 <td><pre lang=swift>
 if array.isEmpty
@@ -601,12 +607,12 @@ switch result {
 
 case .Success: self.doSomething()
                self.doSomethingElse()
-        
 case .Failure: self.doSomething()
                self.doSomethingElse()
 }
 </pre></td>
 </tr>
+<tr>
 <td><pre lang=swift>
 switch result {
 
@@ -623,6 +629,51 @@ switch result {
 </pre></td>
 </tr>
 </table> 
+
+***Rationale:*** Reliance on XCode's auto-indentation. For multi-line statements, separating `case`s with empty lines enhance visual separation.
+
+
+#### Conditions for `if`, `switch`, `for`, and `while` statements should not be enclosed in parentheses (`()`).
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+if array.isEmpty {
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+if (array.isEmpty) {
+    // ...
+}
+</pre></td>
+</tr>
+</table> 
+
+***Rationale:*** This isn't Objective-C.
+
+
+#### Try to avoid nesting statements by `return`ing early when possible.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+guard let strongSelf = self else {
+
+    return
+}
+// do many things with strongSelf
+</pre></td>
+<td><pre lang=swift>
+if let strongSelf = self {
+
+    // do many things with strongSelf
+}
+</pre></td>
+</tr>
+</table> 
+
+***Rationale:*** The more nested scopes to keep track of, the heavier the burden of scanning code.
 
 
 
@@ -766,7 +817,7 @@ let err = error.code
 ***Rationale:*** Clarity is prioritized over slight brevity. 
 
 
-#### Choose names that communicates as much information about what it is and *what it's for*.
+#### Choose a name that communicates as much information about what it is and *what it's for*.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -1077,6 +1128,60 @@ class BaseViewController: UIViewController {
 
 
 
+# Best Practices
+
+## Comments
+
+#### Comments should be answering some form of "why?" question. Anything else should be explainable by the code itself, or not written at all.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+let leftMargin: CGFloat = 20
+view.frame.x = 20
+</pre></td>
+<td><pre lang=swift>
+view.frame.x = 20 // left margin
+</pre></td>
+</tr>
+<tr>
+<td><pre lang=swift>
+@objc dynamic func tableView(tableView: UITableView,
+ heightForHeaderInSection section: Int) -> CGFloat {
+
+    return 0.01 // tableView ignores 0
+}
+</pre></td>
+<td><pre lang=swift>
+@objc dynamic func tableView(tableView: UITableView,
+ heightForHeaderInSection section: Int) -> CGFloat {
+
+    return 0.01 // return small number
+}
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** The best comment is the ones you don't need. If you have to write one be sure to explain the rationale behind the code, not just to simply state the obvious.
+
+
+#### All temporary, unlocalized strings should be marked with `// TODO: localize`
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.titleLabel.text = "Date Today:" // TODO: localize
+</pre></td>
+<td><pre lang=swift>
+self.titleLabel.text = "Date Today:" // TODO: localize
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Features are usually debugged and tested in the native language and translated strings are usually tested separately. This guarantees that all unlocalized texts are accounted for and easy to find later on.
+
+
+
 ## Protection from Dynamism
 
 #### All Objective-C `protocol` implementations, whether properties or methods, should be prefixed with `@objc dynamic`
@@ -1135,7 +1240,10 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 </tr>
 </table>
 
-***Rationale:*** Same reason as the preceding rule, the Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`. 
+***Rationale:*** Same reason as the preceding rule, the Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`.
+
+
+#### All `@IBOutlet`s should be Optional, not Implicitly
 
 
 
@@ -1269,3 +1377,4 @@ for i in n ..< sequence.count {
 ***In general, if you have to add or subtract to `count`, there is probably a better, Swift-y way to do it.***
 
 ***Rationale:*** Clarity of intent, which in turn reduces programming mistakes (esp. off-by-one calculation errors).
+
