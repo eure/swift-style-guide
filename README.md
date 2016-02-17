@@ -37,7 +37,7 @@ That said, this is a live document. As our app grows, our team improves, and Swi
 	- [Access Modifiers](#access-modifiers)
 	- [Type Inference](#type-inference)
 	- [Collections / SequenceTypes](#collections--sequencetypes)
-	- [Rules on `self`](#rules-on-self)
+	- [Protection from Retain Cycles](#protection-from-retain-cycles)
 
 
 
@@ -73,7 +73,7 @@ self.completion = {
 ### Whitespaces
 
 #### Use 4 spaces for tabs.
-Set XCode's **Text Editing** settings as shown:
+Set Xcode's **Text Editing** settings as shown:
  
 <img width="749" alt="screen shot 2016-02-10 at 15 29 59" src="https://cloud.githubusercontent.com/assets/3029684/12940329/3566d882-d00b-11e5-9c2d-344f5c5f70e5.png" />
 
@@ -630,7 +630,7 @@ switch result {
 </tr>
 </table> 
 
-***Rationale:*** Reliance on XCode's auto-indentation. For multi-line statements, separating `case`s with empty lines enhance visual separation.
+***Rationale:*** Reliance on Xcode's auto-indentation. For multi-line statements, separating `case`s with empty lines enhance visual separation.
 
 
 #### Conditions for `if`, `switch`, `for`, and `while` statements should not be enclosed in parentheses (`()`).
@@ -991,7 +991,7 @@ class Icon {
 </tr>
 </table>
 
-***Rationale:*** Makes it easy to jump to specific types when using XCode's *Source Navigator*.
+***Rationale:*** Makes it easy to jump to specific types when using Xcode's *Source Navigator*.
 
 
 #### All properties and methods should be grouped into the superclass/protocol they implement and should be tagged with `// MARK: <superclass/protocol name>`. The rest should be marked as either `// MARK: Public`, `// MARK: Internal`, or `// MARK: Private`.
@@ -1130,6 +1130,9 @@ class BaseViewController: UIViewController {
 
 # Best Practices
 
+In general, **all Xcode warnings should not be ignored**. These include things like using `let` instead of `var` when possible, using `_` in place of unused variables, etc.
+
+
 ## Comments
 
 #### Comments should be answering some form of "why?" question. Anything else should be explainable by the code itself, or not written at all.
@@ -1243,7 +1246,20 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 ***Rationale:*** Same reason as the preceding rule, the Swift compiler sometimes mangle these. Writing `dynamic` guarantees safety, even when we declare them as `private`.
 
 
-#### All `@IBOutlet`s should be Optional, not Implicitly
+#### All `@IBOutlet`s should be declared `weak`. They should also be wrapped as `Optional`, not `ImplicitlyUnwrappedOptional`.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+@IBOutlet dynamic weak var profileIcon: UIImageView?
+</pre></td>
+<td><pre lang=swift>
+@IBOutlet var profileIcon: UIImageView!
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** This guarantees safety even if subclasses opt to not create the view for the `@IBOutlet`. This also protects against crashes caused by properties being accessed before `viewDidLoad(_:)`.
 
 
 
@@ -1377,4 +1393,7 @@ for i in n ..< sequence.count {
 ***In general, if you have to add or subtract to `count`, there is probably a better, Swift-y way to do it.***
 
 ***Rationale:*** Clarity of intent, which in turn reduces programming mistakes (esp. off-by-one calculation errors).
+
+
+## Protection from Retain Cycles
 
