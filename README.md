@@ -272,6 +272,8 @@ case .Failure:self.reportError()
 ***Rationale:*** Same as he previous rule, the colon describes the object to its left, not the right.
 
 
+### Braces
+
 #### Open braces (`{`) should be one space following the previous non-whitespace character.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
