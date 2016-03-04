@@ -19,27 +19,27 @@ That said, this is a live document. As our app grows, our team improves, and Swi
 
 # Table of Contents
 - [Styles and Conventions](#styles-and-conventions)
-	- [Formatting](#formatting)
-	    - [Semicolons (`;`)](#semicolons)
-	    - [Whitespaces](#whitespaces)
-	    - [Commas (`,`)](#commas)
-	    - [Colons (`:`)](#colons)
-	    - [Braces (`{}`)](#braces)
-	    - [Properties](#properties)
-	    - [Control Flow Statements](#control-flow-statements)
-	- [Naming](#naming)
-	    - [Capitalization](#capitalization)
-	    - [Semantics](#semantics)
-	- [Dependencies](#dependencies)
-	    - [Import Statements](#import-statements)
-	- [Declaration Order](#declaration-order)
+    - [Formatting](#formatting)
+        - [Semicolons (`;`)](#semicolons)
+        - [Whitespaces](#whitespaces)
+        - [Commas (`,`)](#commas)
+        - [Colons (`:`)](#colons)
+        - [Braces (`{}`)](#braces)
+        - [Properties](#properties)
+        - [Control Flow Statements](#control-flow-statements)
+    - [Naming](#naming)
+        - [Capitalization](#capitalization)
+        - [Semantics](#semantics)
+    - [Dependencies](#dependencies)
+        - [Import Statements](#import-statements)
+    - [Declaration Order](#declaration-order)
 - [Best Practices](#best-practices)
-	- [Comments](#comments)
-	- [Protection from Dynamism](#protection-from-dynamism)
-	- [Access Modifiers](#access-modifiers)
-	- [Type Inference](#type-inference)
-	- [Collections / SequenceTypes](#collections--sequencetypes)
-	- [Protection from Retain Cycles](#protection-from-retain-cycles)
+    - [Comments](#comments)
+    - [Protection from Dynamism](#protection-from-dynamism)
+    - [Access Modifiers](#access-modifiers)
+    - [Type Inference](#type-inference)
+    - [Collections / SequenceTypes](#collections--sequencetypes)
+    - [Protection from Retain Cycles](#protection-from-retain-cycles)
 
 
 
@@ -630,8 +630,8 @@ case .Failure: self.doSomethingElse()
 <td><pre lang=swift>
 switch result {
 
-	case .Success: self.doSomething()
-	case .Failure: self.doSomethingElse()
+    case .Success: self.doSomething()
+    case .Failure: self.doSomethingElse()
 }
 </pre></td>
 </tr>
@@ -698,7 +698,7 @@ Naming rules are mostly based on Apple's naming conventions, since we'll end up 
 class ImageButton {
 
     enum ButtonState {
-    	// ...
+        // ...
     }
 }
 </pre></td>
@@ -706,7 +706,7 @@ class ImageButton {
 class image_button {
 
     enum buttonState {
-    	// ...
+        // ...
     }
 }
 </pre></td>
@@ -723,9 +723,9 @@ class image_button {
 <td><pre lang=swift>
 enum ErrorCode {
     
-	case Unknown
-  	case NetworkNotFound
-  	case InvalidParameters
+    case Unknown
+      case NetworkNotFound
+      case InvalidParameters
 }
 
 struct CacheOptions : OptionSetType {
@@ -740,9 +740,9 @@ struct CacheOptions : OptionSetType {
 <td><pre lang=swift>
 enum ErrorCode {
     
-	case unknown
-  	case network_not_found
-  	case invalidParameters
+    case unknown
+      case network_not_found
+      case invalidParameters
 }
 
 struct CacheOptions : OptionSetType {
