@@ -1270,9 +1270,64 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 
 
 
+## Access Modifiers
+
+#### Design declarations as `private` by default and only expose as `internal` or `public` as the needs arise.
+
+***Rationale:*** This helps prevent pollution of XCode's auto-completion. In theory this should also help the compiler make better optimizations and build faster.
+
+
+#### All declarations should explicitly specify either `public`, `internal`, or `private`.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+internal class NetworkRequest {
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+class NetworkRequest {
+    // ...
+}
+</pre></td>
+</table>
+
+***Rationale:*** This makes the accessibility clear even in the context of nested types.
+
+
+#### Access modifiers should be written before all other non-`@` modifiers.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+@objc internal class User: NSManagedObject {
+    // ...
+    @NSManaged internal dynamic var identifier: Int
+    // ...
+    @NSManaged private dynamic var internalCache: NSData?
+}
+</pre></td>
+<td><pre lang=swift>
+internal @objc class User: NSManagedObject {
+    // ...
+    @NSManaged dynamic internal var identifier: Int
+    // ...
+    private @NSManaged dynamic var internalCache: NSData?
+}
+</pre></td>
+</table>
+
+***Rationale:*** Combined with the [rules on declaration order](#declaration-order), this improves readability when scanning code vertically.
+
+
+
 ## Type Inference
 
 #### Unless required, a variable/property declaration's type should be inferred from either the left or right side of the statement, but not both.
+
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
