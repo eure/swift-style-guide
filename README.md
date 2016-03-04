@@ -306,7 +306,7 @@ let block ={ () -> Void in
 ***Rationale:*** Separates the brace from the declaration.
 
 
-#### Open braces (`{`) for type declarations, functions, and closures should be followed by one empty line.
+#### Open braces (`{`) for type declarations, functions, and closures should be followed by one empty line. Single-statement closures can be written in one line.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -314,10 +314,12 @@ let block ={ () -> Void in
 class Icon {
 
     let image: UIImage
+    var completion: (() -> Void)
 
     init(image: UIImage) {
     
         self.image = image
+        self.completion = { [weak self] in self?.didComplete() }
     }
     
     func doSomething() {
@@ -332,6 +334,7 @@ class Icon {
 
     init(image: UIImage) {
         self.image = image
+        self.completion = { [weak self] in print("done"); self?.didComplete() }
     }
     
     func doSomething() { self.doSomethingElse() }
@@ -803,7 +806,7 @@ for (i, v) in array.enumerate() {
 ***Rationale:*** There is always a better name than single-character names. Even with `i`, it is still more readable to use `index` instead.
 
 
-#### Avoid abbreviations as much as possible. (although [some](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/APIAbbreviations.html#//apple_ref/doc/uid/20001285-BCIHCGAE) are allowed (`min`/`max`))
+#### Avoid abbreviations as much as possible. (although [some](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/APIAbbreviations.html#//apple_ref/doc/uid/20001285-BCIHCGAE) are allowed such as `min`/`max`)
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
