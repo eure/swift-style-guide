@@ -1270,6 +1270,51 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 
 ## Type Inference
 
+#### Unless required, a variable/property declaration's type should be inferred from either the left or right side of the statement, but not both.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+var backgroundColor = UIColor.whiteColor()
+var iconView = UIImageView(image)
+</pre></td>
+<td><pre lang=swift>
+var backgroundColor: UIColor = UIColor.whiteColor()
+var iconView: UIImageView = UIImageView(image)
+</pre></td>
+</tr>
+<tr>
+<td><pre lang=swift>
+var lineBreakMode = NSLineBreakMode.ByWordWrapping
+// or
+var lineBreakMode: NSLineBreakMode = .ByWordWrapping
+</pre></td>
+<td><pre lang=swift>
+var lineBreakMode: NSLineBreakMode = NSLineBreakMode.ByWordWrapping
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Prevent redundancy. This also reduces ambiguity when binding to generic types.
+
+
+#### When literal types are involved (`StringLiteralConvertible`, `NilLiteralConvertible`, etc), it is encouraged to specify the type explicitly and is preferrable over casting with `as` directly.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+var radius: CGFloat = 0
+var length = CGFloat(0)
+</pre></td>
+<td><pre lang=swift>
+var radius: CGFloat = CGFloat(0)
+var length = 0 as CGFloat // prefer initializer to casts
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Prevent redundancy. This also reduces ambiguity when binding to generic types.
+
 
 
 ## Collections / SequenceTypes
