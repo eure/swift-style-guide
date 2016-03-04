@@ -1502,5 +1502,158 @@ for i in n ..< sequence.count {
 ***Rationale:*** Clarity of intent, which in turn reduces programming mistakes (esp. off-by-one calculation errors).
 
 
-## Protection from Retain Cycles
+## Protection from Retain Cycles 
 
+In particular, this will cover the ever-debatable usage/non-usage of `self`.
+
+#### All instance properties and functions should be fully-qualified with `self`, including within closures.
+
+(See next rule for implications)
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+func setTop(top: CGFloat) {
+
+    self.isAnimating = true
+    self.topConstraint?.constant = top
+    UIView.animateWithDuration(
+        0.3,
+        animations: {
+        
+            self.layoutIfNeeded()
+        }, 
+        completion: { _ in
+        
+            self.isSaving = false
+        }
+    )
+}
+</pre></td>
+<td><pre lang=swift>
+
+func setTop(top: CGFloat) {
+
+    isAnimating = true
+    topConstraint?.constant = top
+    UIView.animateWithDuration(
+        0.3,
+        animations: {
+        
+            layoutIfNeeded()
+        }, 
+        completion: { _ in
+        
+            isSaving = false
+        }
+    )
+}
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** We found that we made less mistakes when we just required `self` all the time than if we have to decide wether to write it or not. That said, we are aware of the implications of this to retain cycles. See rule below.
+
+
+#### For all non-`@noescape` and non-animation closures, accessing `self` within the closure requires a `[weak self]` declaration.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        self?.didDownloadImage(image)
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { image in
+
+        self.didDownloadImage(image) // hello retain cycle
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Combined with the `self`-requirement rule above, retain cycle candidates are very easy to spot. Just look for closures that access `self` and check for the missing `[weak self]`. 
+
+
+#### Never use `unowned` to capture references in closures.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        self?.didDownloadImage(image)
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [unowned self] image in
+
+        self.didDownloadImage(image)
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** While `unowned` is more convenient (you don't need to work with an `Optional`) than `weak`, it is also more prone to crashes. Nobody likes zombies.
+
+
+#### If the validity of the weak `self` in the closure is needed, bind using the variable `` `self` `` to shadow the original.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        guard let `self` = self else { 
+        
+            return
+        }
+        self.didDownloadImage(image)
+        self.reloadData()
+        self.doSomethingElse()
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        guard let strongSelf = self else { 
+        
+            return
+        }
+        strongSelf.didDownloadImage(image)
+        strongSelf.reloadData()
+        strongSelf.doSomethingElse()
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Keep the syntax highlighting ;)
+
+---
+
+[Back to top](#table-of-contents)
