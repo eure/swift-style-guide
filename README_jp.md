@@ -1,4 +1,6 @@
-# Eureka Swift Style Guide
+# eureka Swift Style Guide
+
+[English](https://github.com/eure/swift-style-guide/blob/master/README.md) | [日本語](https://github.com/eure/swift-style-guide/blob/master/README_jp.md)
 
 このスタイルガイドは、弊社のiOSチームが1年以上Swiftのコードを書いて、レビューをして、検証を重ねて培ってきたものです。弊社がリリースしているアプリに適用して、**優れている**と判断したコーディングルールを反映しました。
 
