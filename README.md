@@ -1,4 +1,6 @@
-# Eureka Swift Style Guide
+# eureka Swift Style Guide
+
+[English](https://github.com/eure/swift-style-guide/blob/master/README.md) | [日本語](https://github.com/eure/swift-style-guide/blob/master/README_jp.md)
 
 This style guide is a product of our iOS team's more than a year writing, reviewing, and testing Swift code. It reflects the coding rules we have observed as "efficient" in our production apps.
 
@@ -17,27 +19,27 @@ That said, this is a live document. As our app grows, our team improves, and Swi
 
 # Table of Contents
 - [Styles and Conventions](#styles-and-conventions)
-	- [Formatting](#formatting)
-	    - [Semicolons (`;`)](#semicolons)
-	    - [Whitespaces](#whitespaces)
-	    - [Commas (`,`)](#commas)
-	    - [Colons (`:`)](#colons)
-	    - [Braces (`{}`)](#braces)
-	    - [Properties](#properties)
-	    - [Control Flow Statements](#control-flow-statements)
-	- [Naming](#naming)
-	    - [Capitalization](#capitalization)
-	    - [Semantics](#semantics)
-	- [Dependencies](#dependencies)
-	    - [Import Statements](#import-statements)
-	- [Declaration Order](#declaration-order)
+    - [Formatting](#formatting)
+        - [Semicolons (`;`)](#semicolons)
+        - [Whitespaces](#whitespaces)
+        - [Commas (`,`)](#commas)
+        - [Colons (`:`)](#colons)
+        - [Braces (`{}`)](#braces)
+        - [Properties](#properties)
+        - [Control Flow Statements](#control-flow-statements)
+    - [Naming](#naming)
+        - [Capitalization](#capitalization)
+        - [Semantics](#semantics)
+    - [Dependencies](#dependencies)
+        - [Import Statements](#import-statements)
+    - [Declaration Order](#declaration-order)
 - [Best Practices](#best-practices)
-	- [Comments](#comments)
-	- [Protection from Dynamism](#protection-from-dynamism)
-	- [Access Modifiers](#access-modifiers)
-	- [Type Inference](#type-inference)
-	- [Collections / SequenceTypes](#collections--sequencetypes)
-	- [Protection from Retain Cycles](#protection-from-retain-cycles)
+    - [Comments](#comments)
+    - [Protection from Dynamism](#protection-from-dynamism)
+    - [Access Modifiers](#access-modifiers)
+    - [Type Inference](#type-inference)
+    - [Collections / SequenceTypes](#collections--sequencetypes)
+    - [Protection from Retain Cycles](#protection-from-retain-cycles)
 
 
 
@@ -306,7 +308,7 @@ let block ={ () -> Void in
 ***Rationale:*** Separates the brace from the declaration.
 
 
-#### Open braces (`{`) for type declarations, functions, and closures should be followed by one empty line.
+#### Open braces (`{`) for type declarations, functions, and closures should be followed by one empty line. Single-statement closures can be written in one line.
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -314,10 +316,12 @@ let block ={ () -> Void in
 class Icon {
 
     let image: UIImage
+    var completion: (() -> Void)
 
     init(image: UIImage) {
     
         self.image = image
+        self.completion = { [weak self] in self?.didComplete() }
     }
     
     func doSomething() {
@@ -332,6 +336,7 @@ class Icon {
 
     init(image: UIImage) {
         self.image = image
+        self.completion = { [weak self] in print("done"); self?.didComplete() }
     }
     
     func doSomething() { self.doSomethingElse() }
@@ -625,8 +630,8 @@ case .Failure: self.doSomethingElse()
 <td><pre lang=swift>
 switch result {
 
-	case .Success: self.doSomething()
-	case .Failure: self.doSomethingElse()
+    case .Success: self.doSomething()
+    case .Failure: self.doSomethingElse()
 }
 </pre></td>
 </tr>
@@ -693,7 +698,7 @@ Naming rules are mostly based on Apple's naming conventions, since we'll end up 
 class ImageButton {
 
     enum ButtonState {
-    	// ...
+        // ...
     }
 }
 </pre></td>
@@ -701,7 +706,7 @@ class ImageButton {
 class image_button {
 
     enum buttonState {
-    	// ...
+        // ...
     }
 }
 </pre></td>
@@ -718,9 +723,9 @@ class image_button {
 <td><pre lang=swift>
 enum ErrorCode {
     
-	case Unknown
-  	case NetworkNotFound
-  	case InvalidParameters
+    case Unknown
+      case NetworkNotFound
+      case InvalidParameters
 }
 
 struct CacheOptions : OptionSetType {
@@ -735,9 +740,9 @@ struct CacheOptions : OptionSetType {
 <td><pre lang=swift>
 enum ErrorCode {
     
-	case unknown
-  	case network_not_found
-  	case invalidParameters
+    case unknown
+      case network_not_found
+      case invalidParameters
 }
 
 struct CacheOptions : OptionSetType {
@@ -803,7 +808,7 @@ for (i, v) in array.enumerate() {
 ***Rationale:*** There is always a better name than single-character names. Even with `i`, it is still more readable to use `index` instead.
 
 
-#### Avoid abbreviations as much as possible. (although [some](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/APIAbbreviations.html#//apple_ref/doc/uid/20001285-BCIHCGAE) are allowed (`min`/`max`))
+#### Avoid abbreviations as much as possible. (although [some](https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/CodingGuidelines/Articles/APIAbbreviations.html#//apple_ref/doc/uid/20001285-BCIHCGAE) are allowed such as `min`/`max`)
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -1265,8 +1270,107 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 
 
 
+## Access Modifiers
+
+#### Design declarations as `private` by default and only expose as `internal` or `public` as the needs arise.
+
+***Rationale:*** This helps prevent pollution of XCode's auto-completion. In theory this should also help the compiler make better optimizations and build faster.
+
+
+#### All declarations should explicitly specify either `public`, `internal`, or `private`.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+internal class NetworkRequest {
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+class NetworkRequest {
+    // ...
+}
+</pre></td>
+</table>
+
+***Rationale:*** This makes the accessibility clear even in the context of nested types.
+
+
+#### Access modifiers should be written before all other non-`@` modifiers.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+@objc internal class User: NSManagedObject {
+    // ...
+    @NSManaged internal dynamic var identifier: Int
+    // ...
+    @NSManaged private dynamic var internalCache: NSData?
+}
+</pre></td>
+<td><pre lang=swift>
+internal @objc class User: NSManagedObject {
+    // ...
+    @NSManaged dynamic internal var identifier: Int
+    // ...
+    private @NSManaged dynamic var internalCache: NSData?
+}
+</pre></td>
+</table>
+
+***Rationale:*** Combined with the [rules on declaration order](#declaration-order), this improves readability when scanning code vertically.
+
+
+
 ## Type Inference
 
+#### Unless required, a variable/property declaration's type should be inferred from either the left or right side of the statement, but not both.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+var backgroundColor = UIColor.whiteColor()
+var iconView = UIImageView(image)
+</pre></td>
+<td><pre lang=swift>
+var backgroundColor: UIColor = UIColor.whiteColor()
+var iconView: UIImageView = UIImageView(image)
+</pre></td>
+</tr>
+<tr>
+<td><pre lang=swift>
+var lineBreakMode = NSLineBreakMode.ByWordWrapping
+// or
+var lineBreakMode: NSLineBreakMode = .ByWordWrapping
+</pre></td>
+<td><pre lang=swift>
+var lineBreakMode: NSLineBreakMode = NSLineBreakMode.ByWordWrapping
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Prevent redundancy. This also reduces ambiguity when binding to generic types.
+
+
+#### When literal types are involved (`StringLiteralConvertible`, `NilLiteralConvertible`, etc), it is encouraged to specify the type explicitly and is preferrable over casting with `as` directly.
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+var radius: CGFloat = 0
+var length = CGFloat(0)
+</pre></td>
+<td><pre lang=swift>
+var radius: CGFloat = CGFloat(0)
+var length = 0 as CGFloat // prefer initializer to casts
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Prevent redundancy. This also reduces ambiguity when binding to generic types.
 
 
 ## Collections / SequenceTypes
@@ -1397,5 +1501,158 @@ for i in n ..< sequence.count {
 ***Rationale:*** Clarity of intent, which in turn reduces programming mistakes (esp. off-by-one calculation errors).
 
 
-## Protection from Retain Cycles
+## Protection from Retain Cycles 
 
+In particular, this will cover the ever-debatable usage/non-usage of `self`.
+
+#### All instance properties and functions should be fully-qualified with `self`, including within closures.
+
+(See next rule for implications)
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+func setTop(top: CGFloat) {
+
+    self.isAnimating = true
+    self.topConstraint?.constant = top
+    UIView.animateWithDuration(
+        0.3,
+        animations: {
+        
+            self.layoutIfNeeded()
+        }, 
+        completion: { _ in
+        
+            self.isSaving = false
+        }
+    )
+}
+</pre></td>
+<td><pre lang=swift>
+
+func setTop(top: CGFloat) {
+
+    isAnimating = true
+    topConstraint?.constant = top
+    UIView.animateWithDuration(
+        0.3,
+        animations: {
+        
+            layoutIfNeeded()
+        }, 
+        completion: { _ in
+        
+            isSaving = false
+        }
+    )
+}
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** We found that we made less mistakes when we just required `self` all the time than if we have to decide wether to write it or not. That said, we are aware of the implications of this to retain cycles. See rule below.
+
+
+#### For all non-`@noescape` and non-animation closures, accessing `self` within the closure requires a `[weak self]` declaration.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        self?.didDownloadImage(image)
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { image in
+
+        self.didDownloadImage(image) // hello retain cycle
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Combined with the `self`-requirement rule above, retain cycle candidates are very easy to spot. Just look for closures that access `self` and check for the missing `[weak self]`. 
+
+
+#### Never use `unowned` to capture references in closures.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        self?.didDownloadImage(image)
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [unowned self] image in
+
+        self.didDownloadImage(image)
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** While `unowned` is more convenient (you don't need to work with an `Optional`) than `weak`, it is also more prone to crashes. Nobody likes zombies.
+
+
+#### If the validity of the weak `self` in the closure is needed, bind using the variable `` `self` `` to shadow the original.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        guard let `self` = self else { 
+        
+            return
+        }
+        self.didDownloadImage(image)
+        self.reloadData()
+        self.doSomethingElse()
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        guard let strongSelf = self else { 
+        
+            return
+        }
+        strongSelf.didDownloadImage(image)
+        strongSelf.reloadData()
+        strongSelf.doSomethingElse()
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** Keep the syntax highlighting ;)
+
+---
+
+[Back to top](#table-of-contents)

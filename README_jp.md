@@ -1,4 +1,6 @@
-# Eureka Swift Style Guide
+# eureka Swift Style Guide
+
+[English](https://github.com/eure/swift-style-guide/blob/master/README.md) | [日本語](https://github.com/eure/swift-style-guide/blob/master/README_jp.md)
 
 このスタイルガイドは、弊社のiOSチームが1年以上Swiftのコードを書いて、レビューをして、検証を重ねて培ってきたものです。弊社がリリースしているアプリに適用して、**優れている**と判断したコーディングルールを反映しました。
 
@@ -16,27 +18,27 @@
 
 # 目次
 - [スタイルと慣習](#スタイルと慣習)
-	- [フォーマット](#フォーマット)
-	    - [セミコロン (`;`)](#セミコロン)
-	    - [スペース](#スペース)
-	    - [コンマ (`,`)](#コンマ)
-	    - [コロン (`:`)](#コロン)
-	    - [括弧 (`{}`)](#括弧)
-	    - [プロパティ](#プロパティ)
-	    - [条件分岐](#条件分岐)
-	- [命名](#命名)
-	    - [大文字、小文字](#大文字、小文字)
-	    - [名前の付け方](#名前の付け方)
-	- [依存関係](#依存関係)
-	    - [Import文](#Import文)
-	- [宣言の順序](#宣言の順序)
+　- [フォーマット](#フォーマット)
+　　- [セミコロン (`;`)](#セミコロン)
+　　- [スペース](#スペース)
+　　- [コンマ (`,`)](#コンマ)
+　　- [コロン (`:`)](#コロン)
+　　- [括弧 (`{}`)](#括弧)
+　　- [プロパティ](#プロパティ)
+　　- [条件分岐](#条件分岐)
+　- [命名](#命名)
+　　- [大文字、小文字](#大文字、小文字)
+　　- [名前の付け方](#名前の付け方)
+　- [依存関係](#依存関係)
+　　- [Import文](#Import文)
+　　- [宣言の順序](#宣言の順序)
 - [ベストプラクティス](#ベストプラクティス)
-	- [コメント](#コメント)
-	- [ダイナミックと安全性](#ダイナミックと安全性)
-	- [Access Modifiers](#access-modifiers)
-	- [型のインターフェース](#型のインターフェース)
-	- [Collections / SequenceTypes](#collections--sequencetypes)
-	- [Protection from Retain Cycles](#protection-from-retain-cycles)
+　- [コメント](#コメント)
+　- [ダイナミックと安全性](#ダイナミックと安全性)
+　- [アクセス修飾子](#アクセス修飾子)
+　- [型のインターフェース](#型のインターフェース)
+　- [Collections / SequenceTypes](#collections--sequencetypes)
+　- [Protection from Retain Cycles](#protection-from-retain-cycles)
 
 
 
@@ -73,6 +75,7 @@ self.completion = {
 
 #### タブで半角スペース4つ分を使用する。
 Xcodeの**Text Editing**で以下のように設定します。
+
 <img width="749" alt="screen shot 2016-02-10 at 15 29 59" src="https://cloud.githubusercontent.com/assets/3029684/12940329/3566d882-d00b-11e5-9c2d-344f5c5f70e5.png" />
 
 ***理由:*** 異なるテキストエディタ間でインデントを揃えるためです。
@@ -304,7 +307,7 @@ let block ={ () -> Void in
 ***理由:*** 宣言部分と実装部分を分けるためです。
 
 
-#### 型の宣言、メソッド、クロージャの始め波括弧（`{`）の次に空行を1行入れる。
+#### 型の宣言、メソッド、クロージャの始め波括弧（`{`）の次に空行を1行入れる。1文だけのクロージャは1行で書くことができる。
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -312,10 +315,12 @@ let block ={ () -> Void in
 class Icon {
 
     let image: UIImage
+    var completion: (() -> Void)
 
     init(image: UIImage) {
     
         self.image = image
+        self.completion = { [weak self] in self?.didComplete() }
     }
     
     func doSomething() {
@@ -330,6 +335,7 @@ class Icon {
 
     init(image: UIImage) {
         self.image = image
+        self.completion = { [weak self] in print("done"); self?.didComplete() }
     }
     
     func doSomething() { self.doSomethingElse() }
@@ -443,7 +449,7 @@ lazy var largeImage: UIImage = { () -> UIImage in
 ### プロパティ
 
 #### `get`と`set`とその終わり波括弧（`}`）は全て左端で揃える。1行で記述できる場合、`get`と`set`の宣言は1行で記述する。
-[括弧のルール](#braces)を適用しています。
+[括弧のルール](#括弧)を適用しています。
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -510,7 +516,7 @@ struct Rectangle {
 </tr>
 </table> 
 
-***理由:*** [括弧のルール](#braces)と合わせて、このフォーマットは一貫性と可読性を向上させます。
+***理由:*** [括弧のルール](#括弧)と合わせて、このフォーマットは一貫性と可読性を向上させます。
 
 
 #### 読み取り専用のComputed propertyは`get`を省略する。
@@ -549,7 +555,7 @@ struct Rectangle {
 ### 条件分岐
 
 #### `if`、`else`、`switch`、`do`、`catch`、`repeat`、`guard`、`for`、`while`、`defer`文は対になっている終わり波括弧（`}`）と左端に揃える。
-[括弧のルール](#braces)を適用しています。
+[括弧のルール](#括弧)を適用しています。
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -584,10 +590,10 @@ else
 </tr>
 </table> 
 
-***理由:*** [括弧のルール](#braces)と合わせて、このフォーマットは一貫性と可読性を向上させます。条件分岐文と終わり波括弧が視覚的にスコープを分かりやすくしています。
+***理由:*** [括弧のルール](#括弧)と合わせて、このフォーマットは一貫性と可読性を向上させます。条件分岐文と終わり波括弧が視覚的にスコープを分かりやすくしています。
 
 #### `case`文は`switch`文と左端で揃える。1行の`case` 文を書くことも可能である。複数行の`case`文は`case:`の後でインデントを1つ下げ、空行1行で分ける。
-[括弧のルール](#braces)を適用しています。
+[括弧のルール](#括弧)を適用しています。
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
@@ -1127,6 +1133,7 @@ class BaseViewController: UIViewController {
 ***理由:*** `@`が付くプロパティと関数は最も参照されやすいため（KVCのキーや`Selector`の文字列をチェックしたり、Interface Builderと相互に参照し合うなど）、上部に定義しています。
 
 
+
 # ベストプラクティス
 
 基本的に、**全てのXcodeのWarningsは無視すべきではありません。**例えば、出来る限り`var`よりも`let`を使用する、使用していない変数は`_`を使用するなどです。
@@ -1260,10 +1267,109 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 ***理由:*** サブクラスがその`@IBOutlet`のビューを生成しなかったとしても安全性を保証します。また、`viewDidLoad(_:)`の前にプロパティにアクセスすることでクラッシュすることを防ぎます。
 
 
+## アクセス修飾子
+
+#### `private`として宣言することをデフォルトとして、必要なときだけ`internal`または`public`として外部に公開する。
+
+***理由:*** Xcodeの補完を必要のないプロパティやメソッドで汚してしまうことを防ぐことができます。また、理論的には、コンパイラが最適化をさらにして、ビルドが速くなるでしょう。
+
+
+#### 全ての宣言は明示的に`public`、`internal`、`private`のいずれかを付ける。
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+internal class NetworkRequest {
+    // ...
+}
+</pre></td>
+<td><pre lang=swift>
+class NetworkRequest {
+    // ...
+}
+</pre></td>
+</table>
+
+***理由:*** ネストされた型であっても、アクセスを明確にすることができます。
+
+
+#### アクセス修飾子は`@`以外の修飾子の前に付ける。
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+@objc internal class User: NSManagedObject {
+    // ...
+    @NSManaged internal dynamic var identifier: Int
+    // ...
+    @NSManaged private dynamic var internalCache: NSData?
+}
+</pre></td>
+<td><pre lang=swift>
+internal @objc class User: NSManagedObject {
+    // ...
+    @NSManaged dynamic internal var identifier: Int
+    // ...
+    private @NSManaged dynamic var internalCache: NSData?
+}
+</pre></td>
+</table>
+
+***理由:*** [宣言の順序のルール](#宣言の順序)と合わせて、縦方向にコードを流し読みしている時に、可読性が増します。
+
+
 ## 型のインターフェース
 
+#### 必要な場合を除いて、変数やプロパティの型は宣言文の左側か右側のいずれか片側から推測できるようにする。
 
-### Collections / SequenceTypes
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+var backgroundColor = UIColor.whiteColor()
+var iconView = UIImageView(image)
+</pre></td>
+<td><pre lang=swift>
+var backgroundColor: UIColor = UIColor.whiteColor()
+var iconView: UIImageView = UIImageView(image)
+</pre></td>
+</tr>
+<tr>
+<td><pre lang=swift>
+var lineBreakMode = NSLineBreakMode.ByWordWrapping
+// or
+var lineBreakMode: NSLineBreakMode = .ByWordWrapping
+</pre></td>
+<td><pre lang=swift>
+var lineBreakMode: NSLineBreakMode = NSLineBreakMode.ByWordWrapping
+</pre></td>
+</tr>
+</table>
+
+***Rationale:*** 冗長になることを防ぐためです。また、ジェネリクスの型にバインドされるときの曖昧さを減らします。
+
+
+#### リテラルの型（`StringLiteralConvertible`、`NilLiteralConvertible`など）が関係するときは、`as`で直接キャストするよりも明示的に型を宣言する。
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+var radius: CGFloat = 0
+var length = CGFloat(0)
+</pre></td>
+<td><pre lang=swift>
+var radius: CGFloat = CGFloat(0)
+var length = 0 as CGFloat // キャストするよりもイニシャライザの方が良い
+</pre></td>
+</tr>
+</table>
+
+***理由:*** 冗長になることを防ぐためです。また、ジェネリクスの型にバインドされるときの曖昧さを減らします。
+
+
+## Collections / SequenceTypes
 
 #### `.count`はその値自体が必要な場合のみ使用する。
 <table>
@@ -1391,5 +1497,155 @@ for i in n ..< sequence.count {
 ***理由:*** 意図していることが明確になり、ミスを減らすことができます。特にOff-by-oneエラーを減らすことができます。
 
 
-## Protection from Retain Cycles
+## 循環参照を防ぐ
 
+特に、このルールはこれまでずっと議論されてきた`self`を使用するか否かをカバーする内容です。
+
+#### インスタンスのプロパティとメソッドはクロージャ内を含めて、必ず`self`を付ける。
+
+(この意図は次のルールで説明します)
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+func setTop(top: CGFloat) {
+
+    self.isAnimating = true
+    self.topConstraint?.constant = top
+    UIView.animateWithDuration(
+        0.3,
+        animations: {
+        
+            self.layoutIfNeeded()
+        }, 
+        completion: { _ in
+        
+            self.isSaving = false
+        }
+    )
+}
+</pre></td>
+<td><pre lang=swift>
+
+func setTop(top: CGFloat) {
+
+    isAnimating = true
+    topConstraint?.constant = top
+    UIView.animateWithDuration(
+        0.3,
+        animations: {
+        
+            layoutIfNeeded()
+        }, 
+        completion: { _ in
+        
+            isSaving = false
+        }
+    )
+}
+</pre></td>
+</tr>
+</table>
+
+***理由:*** `self`を付けるか付けないかを判断するよりも、必ず`self`を付けるようにすることで、ミスを少なくすることができることが分かりました。すなわち、このルールは循環参照に関するルールが必要であることを意味しています。詳細は下のルールをご覧ください。
+
+
+#### `@noescape`とアニメーションのクロージャ以外のクロージャ内で`self`にアクセスする場合、必ず`[weak self]`を使用する。
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        self?.didDownloadImage(image)
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { image in
+
+        self.didDownloadImage(image) // 循環参照
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***理由:*** 上記の`self`が必須となるルールと合わせて、循環参照が起きうる箇所を簡単に特定できるようになります。`self`にアクセスしているクロージャを探し、`[weak self]`が抜けていないかを確認するだけです。
+
+
+#### クロージャ内で参照をキャプチャするのに`unowned`を使用しない。
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        self?.didDownloadImage(image)
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [unowned self] image in
+
+        self.didDownloadImage(image)
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***理由:*** `weak`よりも`unowned`の方が便利ですが（`Optional`として扱う必要がないため）、クラッシュを起こしやすくなります。誰もゾンビオブジェクトは好ましくないでしょう。
+
+
+#### クロージャ内でweakな`self`をアンラップする必要がある場合、`` `self` ``に対してバインドする。
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        guard let `self` = self else { 
+        
+            return
+        }
+        self.didDownloadImage(image)
+        self.reloadData()
+        self.doSomethingElse()
+    }
+)
+</pre></td>
+<td><pre lang=swift>
+self.request.downloadImage(
+    url,
+    completion: { [weak self] image in
+
+        guard let strongSelf = self else { 
+        
+            return
+        }
+        strongSelf.didDownloadImage(image)
+        strongSelf.reloadData()
+        strongSelf.doSomethingElse()
+    }
+)
+</pre></td>
+</tr>
+</table>
+
+***理由:*** シンタックスハイライトを有効にするためです。
+
+---
+
+[トップへ戻る](#目次)
