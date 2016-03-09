@@ -1373,7 +1373,6 @@ var length = 0 as CGFloat // prefer initializer to casts
 ***Rationale:*** Prevent redundancy. This also reduces ambiguity when binding to generic types.
 
 
-
 ## Collections / SequenceTypes
 
 #### `.count` should only be used when the count value itself is needed
