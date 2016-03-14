@@ -1291,9 +1291,9 @@ internal class NetworkRequest {
 }
 </pre></td>
 <td><pre lang=swift>
-private let defaultTimeout: NSTimeInterval = 30
+let defaultTimeout: NSTimeInterval = 30
 
-internal class NetworkRequest {
+class NetworkRequest {
     // ...
 }
 </pre></td>
