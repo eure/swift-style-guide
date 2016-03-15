@@ -1183,7 +1183,7 @@ view.frame.x = 20 // left margin
 self.titleLabel.text = "Date Today:" // TODO: localize
 </pre></td>
 <td><pre lang=swift>
-self.titleLabel.text = "Date Today:" // TODO: localize
+self.titleLabel.text = "Date Today:"
 </pre></td>
 </tr>
 </table>
