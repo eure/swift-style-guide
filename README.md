@@ -1,4 +1,5 @@
-# eureka Swift Style Guide
+<a href="http://eure.jp"><img alt="eureka" src="https://cloud.githubusercontent.com/assets/3029684/13734246/52816c8c-e9df-11e5-9240-258ecb380968.png" height=60 /></a>
+# Swift Style Guide
 
 [English](https://github.com/eure/swift-style-guide/blob/master/README.md) | [日本語](https://github.com/eure/swift-style-guide/blob/master/README_jp.md)
 
@@ -1277,24 +1278,54 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 ***Rationale:*** This helps prevent pollution of XCode's auto-completion. In theory this should also help the compiler make better optimizations and build faster.
 
 
-#### All declarations should explicitly specify either `public`, `internal`, or `private`.
+#### For library modules: all declarations should explicitly specify either `public`, `internal`, or `private`.
 
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
 <td><pre lang=swift>
+private let defaultTimeout: NSTimeInterval = 30
+
 internal class NetworkRequest {
     // ...
 }
 </pre></td>
 <td><pre lang=swift>
+let defaultTimeout: NSTimeInterval = 30
+
 class NetworkRequest {
     // ...
 }
 </pre></td>
 </table>
 
-***Rationale:*** This makes the accessibility clear even in the context of nested types.
+***Rationale:*** Makes the intent clear for API consumers.
+
+
+#### For application modules: `public` access is prohibited unless required by a protocol. The `internal` keyword may or may not be written, but the `private` keyword is required.
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+private let someGlobal = "someValue"
+
+class AppDelegate {
+    // ...
+    private var isForeground = false
+}
+</pre></td>
+<td><pre lang=swift>
+public let someGlobal = "someValue"
+
+public class AppDelegate {
+    // ...
+    var isForeground = false
+}
+</pre></td>
+</table>
+
+***Rationale:*** A `public` declaration in an app bundle does not make sense. In effect, declarations are assumed to be either `internal` or `private`, in which case it is sufficient to just require `private` explicitly.
 
 
 #### Access modifiers should be written before all other non-`@` modifiers.

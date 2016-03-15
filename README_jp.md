@@ -1,3 +1,4 @@
+<a href="http://eure.jp"><img alt="eureka" src="https://cloud.githubusercontent.com/assets/3029684/13734246/52816c8c-e9df-11e5-9240-258ecb380968.png" height=60 /></a>
 # eureka Swift Style Guide
 
 [English](https://github.com/eure/swift-style-guide/blob/master/README.md) | [日本語](https://github.com/eure/swift-style-guide/blob/master/README_jp.md)
@@ -1274,24 +1275,54 @@ private dynamic func tapGestureRecognized(sender: UITapGestureRecognizer) {
 ***理由：*** Xcodeの補完を必要のないプロパティやメソッドで汚してしまうことを防ぐことができます。また、理論的には、コンパイラが最適化をさらにして、ビルドが速くなるでしょう。
 
 
-#### 全ての宣言は明示的に`public`、`internal`、`private`のいずれかを付ける。
+#### ライブラリのモジュール：全ての宣言は明示的に`public`、`internal`、`private`のいずれかを付ける。
 
 <table>
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
 <td><pre lang=swift>
+private let defaultTimeout: NSTimeInterval = 30
+
 internal class NetworkRequest {
     // ...
 }
 </pre></td>
 <td><pre lang=swift>
+let defaultTimeout: NSTimeInterval = 30
+
 class NetworkRequest {
     // ...
 }
 </pre></td>
+</tab
+
+***理由：*** APIの使用者にとって意図したことを明確にすることができます。
+
+
+#### アプリケーションのモジュール：`public`はプロトコルで必要な場合を除いて使用しない。`internal`は書いても書かなくても良い。`private`は必ず書く。
+
+<table>
+<tr><th>OK</th><th>NG</th></tr>
+<tr>
+<td><pre lang=swift>
+private let someGlobal = "someValue"
+
+class AppDelegate {
+    // ...
+    private var isForeground = false
+}
+</pre></td>
+<td><pre lang=swift>
+public let someGlobal = "someValue"
+
+public class AppDelegate {
+    // ...
+    var isForeground = false
+}
+</pre></td>
 </table>
 
-***理由：*** ネストされた型であっても、アクセスを明確にすることができます。
+***理由：*** Appバンドルで`public`は役に立ちません。すなわち、アクセス修飾子は`internal`か`private`のいずれかと推測できます。この場合、`private`を明示するだけで十分です。
 
 
 #### アクセス修飾子は`@`以外の修飾子の前に付ける。
