@@ -1379,7 +1379,7 @@ var lineBreakMode: NSLineBreakMode = NSLineBreakMode.ByWordWrapping
 </tr>
 </table>
 
-***Rationale:*** 冗長になることを防ぐためです。また、ジェネリクスの型にバインドされるときの曖昧さを減らします。
+***理由：*** 冗長になることを防ぐためです。また、ジェネリクスの型にバインドされるときの曖昧さを減らします。
 
 
 #### リテラルの型（`StringLiteralConvertible`、`NilLiteralConvertible`など）が関係するときは、`as`で直接キャストするよりも明示的に型を宣言する。
@@ -1525,7 +1525,7 @@ for i in n ..< sequence.count {
 
 ***基本的に、`count`の値に足したり、引いたりして使用したい場合は、Swiftらしい書き方でもっと良い書き方があるでしょう。***
 
-***理由：*** 意図していることが明確になり、ミスを減らすことができます。特にOff-by-oneエラーを減らすことができます。
+***理由：*** 意図していることが明確になり、ミスを減らすことができます。特に[Off-by-oneエラー](https://ja.wikipedia.org/wiki/Off-by-oneエラー)を減らすことができます。
 
 
 ## 循環参照を防ぐ
