@@ -1529,7 +1529,7 @@ for i in n ..< sequence.count {
 
 ***In general, if you have to add or subtract to `count`, there is probably a better, Swift-y way to do it.***
 
-***Rationale:*** Clarity of intent, which in turn reduces programming mistakes (esp. off-by-one calculation errors).
+***Rationale:*** Clarity of intent, which in turn reduces programming mistakes (esp. [off-by-one calculation errors](https://en.wikipedia.org/wiki/Off-by-one_error)).
 
 
 ## Protection from Retain Cycles 
