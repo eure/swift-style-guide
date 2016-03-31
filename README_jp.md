@@ -1148,7 +1148,7 @@ class BaseViewController: UIViewController {
 <tr>
 <td><pre lang=swift>
 let leftMargin: CGFloat = 20
-view.frame.x = 20
+view.frame.x = leftMargin
 </pre></td>
 <td><pre lang=swift>
 view.frame.x = 20 // left margin
