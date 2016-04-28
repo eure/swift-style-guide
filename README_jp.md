@@ -1540,44 +1540,20 @@ for i in n ..< sequence.count {
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
 <td><pre lang=swift>
-func setTop(top: CGFloat) {
-
-    self.isAnimating = true
-    self.topConstraint?.constant = top
-    UIView.animateWithDuration(
-        0.3,
-        animations: {
-        
-            self.layoutIfNeeded()
-        }, 
-        completion: { _ in
-        
-            self.isSaving = false
-        }
-    )
+self.animatableViews.forEach { view in
+            
+    self.animateView(view)
 }
 </pre></td>
 <td><pre lang=swift>
-
-func setTop(top: CGFloat) {
-
-    isAnimating = true
-    topConstraint?.constant = top
-    UIView.animateWithDuration(
-        0.3,
-        animations: {
-        
-            layoutIfNeeded()
-        }, 
-        completion: { _ in
-        
-            isSaving = false
-        }
-    )
+animatableViews.forEach { view in
+            
+    animateView(view)
 }
 </pre></td>
 </tr>
 </table>
+
 
 ***理由：*** `self`を付けるか付けないかを判断するよりも、必ず`self`を付けるようにすることで、ミスを少なくすることができることが分かりました。すなわち、このルールは循環参照に関するルールが必要であることを意味しています。詳細は下のルールをご覧ください。
 
