@@ -838,7 +838,7 @@ class Article {
 class Article {
 
     var text: String
-    // is this the title or the content text?
+    // これは記事のタイトルかコンテンツか分からない
 }
 </pre></td>
 </tr>
