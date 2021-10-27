@@ -1,3 +1,5 @@
+> Note: This repository is no longer being maintained.
+
 <a href="http://eure.jp"><img alt="eureka" src="https://cloud.githubusercontent.com/assets/3029684/13734246/52816c8c-e9df-11e5-9240-258ecb380968.png" height=60 /></a>
 # eureka Swift Style Guide
 
