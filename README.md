@@ -668,16 +668,16 @@ if (array.isEmpty) {
 <tr><th>OK</th><th>NG</th></tr>
 <tr>
 <td><pre lang=swift>
-guard let strongSelf = self else {
+guard let image = image else {
 
     return
 }
-// do many things with strongSelf
+// do many things with image
 </pre></td>
 <td><pre lang=swift>
-if let strongSelf = self {
+if let image = image {
 
-    // do many things with strongSelf
+    // do many things with image
 }
 </pre></td>
 </tr>
