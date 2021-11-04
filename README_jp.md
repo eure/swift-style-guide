@@ -1296,7 +1296,7 @@ class NetworkRequest {
     // ...
 }
 </pre></td>
-</tab
+</table>
 
 ***理由：*** APIの使用者にとって意図したことを明確にすることができます。
 
